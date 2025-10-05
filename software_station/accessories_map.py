@@ -25,7 +25,6 @@ ACCESSORIES_MAP = {
     "gedit":              {"name": "Text Editor",        "icon": "accessories-text-editor"},
 
     # Utilities
-    "gparted":            {"name": "GParted",            "icon": "gparted"},
     "baobab":             {"name": "Disk Usage Analyzer","icon": "baobab"},
     "htop":               {"name": "System Monitor",     "icon": "utilities-system-monitor"},
 
@@ -35,7 +34,6 @@ ACCESSORIES_MAP = {
 
     # Web comms
     "telegram-desktop":   {"name": "Telegram",           "icon": "telegram-desktop"},
-    "telegram":           {"name": "Telegram",           "icon": "telegram-desktop"},
     "thunderbird":        {"name": "Thunderbird",        "icon": "thunderbird"},
 
     # Graphics
