@@ -83,4 +83,5 @@ setup(
     scripts=['software-station'],
     cmdclass=cmdclass,
     python_requires='>=3.11',
+    zip_safe=False,
 )
