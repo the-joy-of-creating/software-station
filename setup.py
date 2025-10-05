@@ -35,7 +35,6 @@ def datafilelist(installbase, sourcebase):
 
 prefix = sys.prefix
 
-
 # '{prefix}/share/man/man1'.format(prefix=sys.prefix), glob('data/*.1')),
 
 data_files = [
@@ -51,6 +50,19 @@ cmdclass = {
     "clean": DistUtilsExtra.command.clean_i18n.clean_i18n,
 }
 
+# -------------------------------------------------------------
+# Enhanced: include themed icon helper modules for packaging
+# -------------------------------------------------------------
+packages = ['software_station']
+package_data = {
+    'software_station': [
+        'icons.py',
+        'desktop_index.py',
+        'pkg_desktop_map.py',
+        'accessories_map.py',
+    ],
+}
+
 setup(
     name="software-station",
     version=PROGRAM_VERSION,
@@ -59,9 +71,12 @@ setup(
     author='Eric Turgeon',
     url='https://github/GhostBSD/software-station/',
     package_dir={'': '.'},
+    packages=packages,
+    package_data=package_data,
     data_files=data_files,
     install_requires=['setuptools'],
     py_modules=["software_station_pkg", "software_station_xpm"],
     scripts=['software-station'],
     cmdclass=cmdclass
 )
+
