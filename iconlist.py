@@ -69,22 +69,27 @@ def themed_icon_and_label_async(
     """
     Resolve a label + icon without blocking the UI.
     - If themed stack is available and enabled for the category, use it.
-    - Otherwise, immediately return (pkg_name, legacy_pixbuf or None).
+    - Otherwise, offload legacy_get_pixbuf to a worker thread.
     The callback runs on the GTK main thread.
     """
     if _THEMED_ICONS_AVAILABLE and _category_uses_themed(category):
         _resolve_label_and_icon_async(pkg_name, _ACCESSORIES_MAP, size, on_ready)  # type: ignore[misc]
         return
 
-    # Non-themed path: try legacy pixbuf immediately.
-    pix = None
-    if _legacy_get_pixbuf:
-        try:
-            pix = _legacy_get_pixbuf(pkg_name, size)  # type: ignore[call-arg]
-        except Exception:
-            pix = None
-    # Call back synchronously; caller is presumably already on main thread.
-    on_ready(pkg_name, pix)
+    # Non-themed path: offload legacy_get_pixbuf to a worker thread
+    def worker():
+        pix = None
+        if _legacy_get_pixbuf:
+            try:
+                pix = _legacy_get_pixbuf(pkg_name, size)  # type: ignore[call-arg]
+            except Exception:
+                pix = None
+        # Call back on main thread
+        from gi.repository import GLib
+        GLib.idle_add(on_ready, pkg_name, pix)
+    
+    import threading
+    threading.Thread(target=worker, daemon=True).start()
 
 
 def themed_icon_and_label_sync(
